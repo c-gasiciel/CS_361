@@ -43,6 +43,7 @@ CREATE TABLE `ballot` (
 -- Dumping data for table `ballot`
 --
 
+LOCK TABLES `ballot` WRITE;
 INSERT INTO `ballot` (`ballot_id`, `full_name`, `age`, `candidate`, `zip`, `party`, `electoral_college`) VALUES
 (1, 'Nadia Leung', 34, 'Hillary Clinton', '01650', 'Democrat', 6),
 (2, 'Thomas Lem', 36, 'Hillary Clinton', '01650', 'Democrat', 6),
@@ -54,6 +55,7 @@ INSERT INTO `ballot` (`ballot_id`, `full_name`, `age`, `candidate`, `zip`, `part
 (8, 'Penny Li', 38, 'Donald Trump', '01240', 'Republican', 8),
 (9, 'Rachel Kim', 36, 'Donald Trump', '01980', 'Republican', 9),
 (10, 'Uma Thurman', 38, 'Donald Trump', '01980', 'Republican', 9);
+UNLOCK TABLES;
 
 -- --------------------------------------------------------
 
@@ -77,49 +79,45 @@ CREATE TABLE `user_info` (
   `email` varchar(320) NOT NULL,
   `is_voter` boolean NOT NULL DEFAULT false,    -- True if eligible voter
   `is_admin` boolean NOT NULL DEFAULT false,    -- True if can add ballots/surveys
-  `is_candidate` boolean NOT NULL DEFAULT false -- True if candidate
+  `is_candidate` boolean NOT NULL DEFAULT false, -- True if candidate
+  `voted` boolean NOT NULL DEFAULT false,  -- Logs if user voted
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user_info`
 --
 
-INSERT INTO `user_info` (`id`, `username`, `pswd_hash`, `first_name`, `last_name`, `birthday`, `street`, `apt`, `city`, `state`, `zip`, `email`, `is_voter`, `is_admin`, `is_candidate`) VALUES
-(1, 'ychen', 'aaabbbccc', 'Yuzhe', 'Chen', '1985-06-06', '123 Fake Street', NULL, 'Anytown', 'NY', '12345', 'yezhe@gmail.com', true, false, false),
-(2, 'kartj', 'afhdihk8977', 'Jimmy', 'Kart', '1965-06-06', '666 Some Avenue', 'B', 'Baboon County', 'ID', '55555', 'j.kart@idahovote.gov', true, true, false),
-(3, 'gaga4ever', 'hhhhhhhhhhh', 'Lady', 'Gaga', '1990-02-04', '987 Main Street', 'D', 'Los Angeles', 'CA', '90001', 'gaga@gmail.com', true, false, true),
-(4, 'jolierm', 'afdhkl@#98889', 'Rachel', 'Jolie', '1995-06-12', '2525 Lake Boulevard', NULL, 'Seattle', 'WA', '98101', 'jolie@paramount.com', true, false, false),
-(5, 'ostone', 'afjjjiiiii', 'Olivia', 'stone', '1987-02-27', '10506 Western Avenue', NULL, 'Lexington', 'KY', '40502', 'olivia@aol.com', true, false, false);
+LOCK TABLES `user_info` WRITE;
+INSERT INTO `user_info` (`id`, `username`, `pswd_hash`, `first_name`, `last_name`, `birthday`, `street`, `apt`, `city`, `state`, `zip`, `email`, `is_voter`, `is_admin`, `is_candidate`, `voted`) VALUES
+(1, 'ychen', 'aaabbbccc', 'Yuzhe', 'Chen', '1985-06-06', '123 Fake Street', NULL, 'Anytown', 'NY', '12345', 'yezhe@gmail.com', true, false, false, false),
+(2, 'kartj', 'afhdihk8977', 'Jimmy', 'Kart', '1965-06-06', '666 Some Avenue', 'B', 'Baboon County', 'ID', '55555', 'j.kart@idahovote.gov', true, true, false, false),
+(3, 'gaga4ever', 'hhhhhhhhhhh', 'Lady', 'Gaga', '1990-02-04', '987 Main Street', 'D', 'Los Angeles', 'CA', '90001', 'gaga@gmail.com', true, false, true, false),
+(4, 'jolierm', 'afdhkl@#98889', 'Rachel', 'Jolie', '1995-06-12', '2525 Lake Boulevard', NULL, 'Seattle', 'WA', '98101', 'jolie@paramount.com', true, false, false, false),
+(5, 'ostone', 'afjjjiiiii', 'Olivia', 'Stone', '1987-02-27', '10506 Western Avenue', NULL, 'Lexington', 'KY', '40502', 'olivia@aol.com', true, false, false, false);
+UNLOCK TABLES;
 
 -- --------------------------------------------------------
-
--- ** Removed this table because voters' votes should not
--- be identifiably logged due to the secrecy of ballots.
--- We can change this to track demographic information
--- if you would like (age, sex, ethnicity, etc.) if
--- we also want to include that data as part of
--- user registration (CG) **
-
 --
 -- Table structure for table `candidate_votes`
 --
 
--- DROP TABLE IF EXISTS `candidate_votes`;
--- CREATE TABLE `candidate_votes` (
---  `voter_id` int(11) NOT NULL,
---  `candidate_id` int(11) NOT NULL
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ DROP TABLE IF EXISTS `candidate_votes`;
+ CREATE TABLE `candidate_votes` (
+  `voter_id` int(11) NOT NULL,
+  `candidate_id` int(11) NOT NULL
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `candidate_votes`
 --
 
--- INSERT INTO `candidate_votes` (`voter_id`, `candidate_id`) VALUES
--- (1, 1),
--- (2, 3),
--- (3, 6),
--- (4, 5),
--- (5, 3);
+ INSERT INTO `candidate_votes` (`voter_id`, `candidate_id`) VALUES
+  (1, 1),
+  (2, 3),
+  (3, 6),
+  (4, 5),
+  (5, 3);
 
 -- --------------------------------------------------------
 
@@ -139,12 +137,14 @@ CREATE TABLE `state_vote` (
 -- Dumping data for table `state_vote`
 --
 
+LOCK TABLES `state_vote` WRITE;
 INSERT INTO `state_vote` (`id`, `count`, `candidate_id`, `voter_id`) VALUES
 (1, 650, 1, 1),
 (2, 1230, 3, 2),
 (3, 2540, 4, 3),
 (4, 3960, 2, 4),
 (5, 3220, 2, 5);
+UNLOCK TABLES;
 
 -- --------------------------------------------------------
 
@@ -163,6 +163,7 @@ CREATE TABLE `state_ballot` (
 -- Dumping data for table `state_ballot`
 --
 
+LOCK TABLES `state_ballot` WRITE;
 INSERT INTO `state_ballot` (`electoral_college`, `state_id`, `ballot_id`) VALUES
 (1, 1, 2),
 (1, 2, 1),
@@ -173,6 +174,7 @@ INSERT INTO `state_ballot` (`electoral_college`, `state_id`, `ballot_id`) VALUES
 (2, 4, 9),
 (1, 5, 7),
 (1, 5, 9);
+UNLOCK TABLES;
 
 -- --------------------------------------------------------
 
@@ -187,7 +189,8 @@ CREATE TABLE `candidates` (
   `office` varchar(255) NOT NULL,  -- Office candidate is running for
   `state` varchar(255) DEFAULT NULL,  -- State candidate is running in
   `district` int (11) DEFAULT NULL,  -- District candidate is running in
-  `party` varchar(255) NOT NULL
+  `party` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -212,7 +215,8 @@ CREATE TABLE `votes_by_state` (
   `cand_id` int(11) NOT NULL,
   `state` varchar(255) NOT NULL,
   `total` int (11) NOT NULL DEFAULT 0,
-  PRIMARY KEY(`cand_id`, `state`)
+  PRIMARY KEY(`cand_id`, `state`),
+  KEY `cand_id` (`cand_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -267,15 +271,15 @@ ALTER TABLE `ballot`
 --
 -- Indexes for table `voters`
 --
-ALTER TABLE `user_info`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `user_info`
+--  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `candidate_votes`
 --
--- ALTER TABLE `candidate_votes`
---  ADD PRIMARY KEY (`voter_id`,`candidate_id`),
---  ADD KEY `candidate_id` (`candidate_id`);
+ ALTER TABLE `candidate_votes`
+  ADD PRIMARY KEY (`voter_id`,`candidate_id`),
+  ADD KEY `candidate_id` (`candidate_id`);
 
 --
 -- Indexes for table `state_vote`
@@ -295,8 +299,8 @@ ALTER TABLE `state_ballot`
 --
 -- Indexes for table `candidates`
 --
-ALTER TABLE `candidates`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `candidates`
+--  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `candidate_ballot`
@@ -334,39 +338,40 @@ ALTER TABLE `candidates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 
- ALTER TABLE `votes_by_state`
-  ADD CONSTRAINT `votes_by_state_ibfk_1` FOREIGN KEY (`cand_id`) REFERENCES `candidates` (`id`);
 --
 -- Constraints for dumped tables
 --
 
+ALTER TABLE `votes_by_state`
+ ADD CONSTRAINT `votes_by_state_ibfk_1` FOREIGN KEY (`cand_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 --
 -- Constraints for table `candidate_votes`
 --
--- ALTER TABLE `candidate_votes`
---  ADD CONSTRAINT `candidate_votes_ibfk_1` FOREIGN KEY (`voter_id`) REFERENCES `voters` (`id`),
---  ADD CONSTRAINT `candidate_votes_ibfk_2` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`);
+ ALTER TABLE `candidate_votes`
+  ADD CONSTRAINT `candidate_votes_ibfk_1` FOREIGN KEY (`voter_id`) REFERENCES `voters` (`id`),
+  ADD CONSTRAINT `candidate_votes_ibfk_2` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`);
 
 --
 -- Constraints for table `state_vote`
 --
 ALTER TABLE `state_vote`
-  ADD CONSTRAINT `state_vote_ibfk_1` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`),
-  ADD CONSTRAINT `state_vote_ibfk_2` FOREIGN KEY (`voter_id`) REFERENCES `user_info` (`id`);
+  ADD CONSTRAINT `state_vote_ibfk_1` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `state_vote_ibfk_2` FOREIGN KEY (`voter_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `state_ballot`
 --
 ALTER TABLE `state_ballot`
-  ADD CONSTRAINT `state_ballot_ibfk_1` FOREIGN KEY (`state_id`) REFERENCES `state_vote` (`id`),
-  ADD CONSTRAINT `state_ballot_ibfk_2` FOREIGN KEY (`ballot_id`) REFERENCES `ballot` (`ballot_id`);
+  ADD CONSTRAINT `state_ballot_ibfk_1` FOREIGN KEY (`state_id`) REFERENCES `state_vote` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `state_ballot_ibfk_2` FOREIGN KEY (`ballot_id`) REFERENCES `ballot` (`ballot_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `candidate_ballot`
 --
 ALTER TABLE `candidate_ballot`
-  ADD CONSTRAINT `candidate_ballot_ibfk_1` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`),
-  ADD CONSTRAINT `candidate_ballot_ibfk_2` FOREIGN KEY (`ballot_id`) REFERENCES `ballot` (`ballot_id`);
+  ADD CONSTRAINT `candidate_ballot_ibfk_1` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `candidate_ballot_ibfk_2` FOREIGN KEY (`ballot_id`) REFERENCES `ballot` (`ballot_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
