@@ -52,6 +52,6 @@ var states = {
 }
 
 var select = document.getElementByID("state_name");
-for(index in states){}
+for(index in states){
   select.options[select.options.length] = new Option(myobject[index], index);
 }

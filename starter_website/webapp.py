@@ -1,10 +1,17 @@
 from flask import Flask, render_template
 from flask import request, redirect
 from db_connector.db_connector import connect_to_database, execute_query
-
-# Create web applicable
+#create the web application
 webapp = Flask(__name__)
 
+#provide a route where requests on the web application can be addressed
+
+#provide a route where requests on the web application can be addressed
+@webapp.route('/')
+#provide a view (fancy name for a function) which responds to any requests on this route
+def hello():
+    return render_template('register.html');
+    
 # Route for adding a new voter
 @webapp.route('/add_new_voter', methods=['POST','GET'])
 # Provide a view which responds to any requests on this productVendor
