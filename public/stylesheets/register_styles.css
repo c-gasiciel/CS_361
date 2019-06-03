@@ -1,0 +1,59 @@
+body {
+	background-color: #c6c9ce;
+}
+
+#addPersonPage {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+}
+
+#addPerson {
+	display: grid;
+	grid-template-columns: auto auto;
+	text-align: right;
+	vertical-align: top;
+	align-items: center;
+	width: 50%;
+	margin: 0 auto;
+	
+	background-color: #4a4f56;
+	color: white;
+	border: 1px solid black;
+	border-radius: 10px;
+}
+
+#pageTitle {
+	border: 1px solid black;
+	border-radius: 10px;
+	background-color: #4a4f56;
+	color: white;
+	width: 50%;
+	height: 50px;
+	margin: 10px auto;
+	
+	display: flex;
+    justify-content:center;
+    align-content:center;
+    flex-direction:column; 
+}
+#addPerson input, select {
+	margin: 5px;
+}
+
+#addPerson input[type=submit] {
+	width: 150px;
+	height: 40px;
+	background-color: #0e5cd6;
+	color: white;
+	font-size: 15px;
+	cursor: pointer;
+	border: 1px solid black;
+	border-radius: 20px;
+	
+}
+
+#addPerson input[type=submit]:hover {
+	background-color: #1b3866;
+}

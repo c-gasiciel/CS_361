@@ -3,14 +3,18 @@ from flask import request, redirect
 from db_connector.db_connector import connect_to_database, execute_query
 
 # Create web applicable
-webapp = Flask(_name_)
+webapp = Flask(__name__, static_url_path='/static')
 
 # Route for adding a new voter
-@webapp.route('/add_new_voter', methods=['POST']['GET')
+@webapp.route('/add_new_voter', methods=['POST','GET'])
 # Provide a view which responds to any requests on this productVendor
 def add_new_voter():
     db_connection = connect_to_database()
-    if request.method == 'POST':
+
+    if request.method == 'GET':
+        return render_template('register.html', myscript = 'stateScript.js')
+
+    elif request.method == 'POST':
         print("Adding new voter");
         usrname = request.form["username"]
         pwd = request.form["pwd"]
@@ -26,4 +30,9 @@ def add_new_voter():
         zip = request.form["zip"]
         email = request.form["email"]
 
-    query = 'INSERT INTO user_info (username, pswd_hash, first_name, last_name, birthday, street, apt)'
+
+        query = 'INSERT INTO user_info (username, pswd_hash, first_name, last_name, birthday, street, apt, city, state, zip, email, is_voter) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        data = (usrname, pwd, fname, lname, dob, addr, apt, city, state, zip, email, 1)
+        execute_query(db_connection, query, data)
+        print("Successfully added new people!")
+        return redirect('/reg_confirmation')
