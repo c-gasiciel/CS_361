@@ -1,49 +1,19 @@
-<html>
-<head>
-  <title>Create a Voter Account</title>
-</head>
-
+<h1 id="banner">App Name</h1>
 <h3>Create a Voter Account</h3>
 <form id="addPerson" action="/add_new_person" method="post">
-  Username: <input type="text" name="username"><br>
-  Password: <input type="password" name="pwd"><br>
-  Confirm password: <input type="password" name="confPwd"><br>
-  First name: <input type="text" name="fname">
-  Last name: <input type="text" name="lname"><br>
-  Social Security Number: <input type="text" name="ssn">
-  Date of Birth: <input type="date" name="dob"><br>
-  Street address: <input type="text" name="stAddr"><br>
-  City: <input type="text" name="city">
-  State:<select id="state_name" name="state">
+  Username: <input type="text" name="username" required><br>
+  Password: <input type="password" name="pwd" required><br>
+  Confirm password: <input type="password" name="confPwd" required><br>
+  First name: <input type="text" name="fname" required>
+  Last name: <input type="text" name="lname" required><br>
+  Social Security Number: <input type="text" name="ssn" required>
+  Date of Birth: <input type="date" name="dob" required><br>
+  Street address: <input type="text" name="stAddr" required><br>
+  City: <input type="text" name="city" required>
+  State:<select id="state_name" name="state" required>
   </select>
-  Zip code: <input type="number" name="zip"><br>
-  Email: <input type="email" name="email"><br>
+  Zip code: <input type="number" name="zip" required><br>
+  Email: <input type="email" name="email" required><br>
   <input type="submit" value="Submit">
 </form>
 <br/ >
-
-<!--
-<h3>Current people</h3>
-<table border='1'>
-    <thead>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Homeworld</th>
-        <th>Age</th>
-    </thead>
-    <tbody>
-      {% for r in rows %}
-      <tr>
-        <td> {{ r.0 }}</td>
-        <td> {{ r[1] }}</td>
-        <td> {{ r[2] }}</td>
-        <td> {{ r[3] }}</td>
-        <td> <input type='button' name='Update' value='Update'
-            onclick="window.location = '/update_people/{{r[4]}}'"> </td>
-        <td> <input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_people/{{r[4]}}'"> </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-</table>
--->
-</html>
