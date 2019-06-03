@@ -3,8 +3,10 @@
 <head>
     <title>Demo Page</title>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/stylesheets/register_styles.css" type="text/css">
+
     {% for myscript in jsscripts %}
-    <script src="/static/{{myscript}}"></script>
+    <script src="/static/scripts/{{myscript}}"></script>
     {% endfor %}
 </head>
 <body>

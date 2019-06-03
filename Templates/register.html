@@ -1,3 +1,10 @@
+<html>
+<head>
+  <title>Create a Voter Account</title>
+  <link rel="stylesheet" href="static/stylesheets/register_styles.css">
+	<script src="/static/scripts/stateScript.js"></script>
+</head>
+
 <div id="addPersonPage">
 	<h3 id="pageTitle">Create a Voter Account</h3>
 	<form id="addPerson" action="/add_new_person" method="post">
@@ -31,3 +38,30 @@
 	</form>
 	<br/ >
 </div>
+
+
+<!--
+<h3>Current people</h3>
+<table border='1'>
+    <thead>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Homeworld</th>
+        <th>Age</th>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td> {{ r.0 }}</td>
+        <td> {{ r[1] }}</td>
+        <td> {{ r[2] }}</td>
+        <td> {{ r[3] }}</td>
+        <td> <input type='button' name='Update' value='Update'
+            onclick="window.location = '/update_people/{{r[4]}}'"> </td>
+        <td> <input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_people/{{r[4]}}'"> </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+-->
+</html>

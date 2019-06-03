@@ -3,7 +3,7 @@ from flask import request, redirect
 from db_connector.db_connector import connect_to_database, execute_query
 
 # Create web applicable
-webapp = Flask(__name__, static_url_path='/static')
+webapp = Flask(__name__)
 
 # Route for adding a new voter
 @webapp.route('/add_new_voter', methods=['POST','GET'])
@@ -12,7 +12,7 @@ def add_new_voter():
     db_connection = connect_to_database()
 
     if request.method == 'GET':
-        return render_template('register.html', myscript = 'stateScript.js')
+        return render_template('register.html', jsscripts = ['stateScript.js'])
 
     elif request.method == 'POST':
         print("Adding new voter");
