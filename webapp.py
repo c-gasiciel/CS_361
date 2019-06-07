@@ -1,9 +1,11 @@
 from flask import Flask, render_template
-from flask import request, redirect
+from flask import request, redirect, url_for
 from db_connector.db_connector import connect_to_database, execute_query
 
 # Create web applicable
-webapp = Flask(__name__)
+webapp = Flask(__name__, static_url_path='/static')
+
+db_connection = connect_to_database()
 
 # Route for adding a new voter
 @webapp.route('/add_new_voter', methods=['POST','GET'])
@@ -12,8 +14,7 @@ def add_new_voter():
     db_connection = connect_to_database()
 
     if request.method == 'GET':
-        print("Get request")
-        return render_template('register.html')
+        return render_template('register.html', myscript = 'stateScript.js')
 
     elif request.method == 'POST':
         print("Adding new voter");
@@ -31,10 +32,31 @@ def add_new_voter():
         zip = request.form["zip"]
         email = request.form["email"]
 
-        print(pwd)
 
         query = 'INSERT INTO user_info (username, pswd_hash, first_name, last_name, birthday, street, apt, city, state, zip, email, is_voter) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
         data = (usrname, pwd, fname, lname, dob, addr, apt, city, state, zip, email, 1)
         execute_query(db_connection, query, data)
         print("Successfully added new people!")
-        return ('Success!  Now you are ready to use the app!');
+        return redirect('/reg_confirmation')
+				
+@webapp.route('/login')
+def login():
+	return render_template("login.html", title="data")
+
+@webapp.route('/verifyUser', methods=["POST"])
+def verify():
+    username = str(request.form["usrname"])
+    password = str(request.form["pwd"])
+    cursor = db_connection.cursor()
+    cursor.execute("SELECT name FROM user_info WHERE name='"+usrname"'")
+    user = cursor.fetchone()
+
+    if len(user) is 1:
+        return redirect(url_for("home"))
+    else:
+        return "Failed to login!"
+
+@webapp.route("/home")
+def home:
+    return render_template("home.html")
+	
