@@ -34,7 +34,7 @@ CREATE TABLE `ballot` (
   `full_name` varchar(255) NOT NULL,
   `age` int(11) NOT NULL,
   `candidate` varchar(255) NOT NULL,
-  `zip` decimal(8,0) NOT NULL,
+  `zip` int(11) NOT NULL,
   `party` varchar(255) NOT NULL,
   `electoral_college` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -47,7 +47,7 @@ LOCK TABLES `ballot` WRITE;
 INSERT INTO `ballot` (`ballot_id`, `full_name`, `age`, `candidate`, `zip`, `party`, `electoral_college`) VALUES
 (1, 'Nadia Leung', 34, 'Hillary Clinton', '01650', 'Democrat', 6),
 (2, 'Thomas Lem', 36, 'Hillary Clinton', '01650', 'Democrat', 6),
-(3, 'Clarissa Gasiciel', 38, 'Hillary Clinton', '650', 'Democrat', 6),
+(3, 'Clarissa Gasiciel', 31, 'Hillary Clinton', '650', 'Democrat', 6),
 (4, 'Stephen Thomas', 34, 'Donald Trump', '02580', 'Republican', 3),
 (5, 'Evan Schein', 36, 'Donald Trump', '02580', 'Republican', 3),
 (6, 'Daniel Ram', 38, 'Hillary Clinton', '02580', 'Democrat', 3),
@@ -60,7 +60,7 @@ UNLOCK TABLES;
 -- --------------------------------------------------------
 
 --
--- Table structure for user information
+-- Table structure for storing user information
 --
 
 DROP TABLE IF EXISTS `user_info`;
@@ -81,7 +81,8 @@ CREATE TABLE `user_info` (
   `is_admin` boolean NOT NULL DEFAULT false,    -- True if can add ballots/surveys
   `is_candidate` boolean NOT NULL DEFAULT false, -- True if candidate
   `voted` boolean NOT NULL DEFAULT false,  -- Logs if user voted
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_index`(`username`, `email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -179,7 +180,7 @@ UNLOCK TABLES;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `candidates`
+-- Table structure for storing candidate information
 --
 
 DROP TABLE IF EXISTS `candidates`;

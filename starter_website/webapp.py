@@ -1,27 +1,24 @@
 from flask import Flask, render_template
-from flask import request, redirect
+from flask import request, redirect, url_for
+# from werkzeug.security import generate_password_hash, check_password_hash
 from db_connector.db_connector import connect_to_database, execute_query
-#create the web application
-webapp = Flask(__name__)
 
-#provide a route where requests on the web application can be addressed
+# Create web applicable
+webapp = Flask(__name__, static_url_path='/static')
 
-#provide a route where requests on the web application can be addressed
-@webapp.route('/')
-#provide a view (fancy name for a function) which responds to any requests on this route
-def hello():
-    return render_template('register.html');
-    
+db_connection = connect_to_database()
+
 # Route for adding a new voter
 @webapp.route('/add_new_voter', methods=['POST','GET'])
 # Provide a view which responds to any requests on this productVendor
 def add_new_voter():
     db_connection = connect_to_database()
 
+    # Display registration page
     if request.method == 'GET':
-        print("Get request")
-        return render_template('register.html')
+        return render_template('register.html', myscript = 'stateScript.js')
 
+    # Submit and validate user registration information
     elif request.method == 'POST':
         print("Adding new voter");
         usrname = request.form["username"]
@@ -37,11 +34,52 @@ def add_new_voter():
         state = request.form["state"]
         zip = request.form["zip"]
         email = request.form["email"]
-
-        print(pwd)
+     
 
         query = 'INSERT INTO user_info (username, pswd_hash, first_name, last_name, birthday, street, apt, city, state, zip, email, is_voter) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
         data = (usrname, pwd, fname, lname, dob, addr, apt, city, state, zip, email, 1)
         execute_query(db_connection, query, data)
         print("Successfully added new people!")
-        return ('Success!  Now you are ready to use the app!');
+        return redirect('/reg_confirmation')
+
+
+# Render confirmation of successful registration
+@webapp.route('/reg_confirmation')
+def success():
+    return render_template('success.html', results="You've successfully created a voter account!")
+
+# Render login page
+@webapp.route('/login')
+def login():
+	return render_template("login.html", title="data")
+
+@webapp.route('/verifyUser', methods=["POST"])
+def verify():
+    db_connection = connect_to_database()
+    
+    # username = str(request.form["username"])
+    # password = str(request.form["password"])
+    
+    username = request.form['username']
+    password = request.form['password']
+    print(username)
+    print(password)
+    cursor = db_connection.cursor()
+    sql = 'SELECT username FROM user_info WHERE username = (%s)'
+    # user_result = execute_query(db_connection, sql).fetchone()
+    
+    cursor.execute(sql, (username,))
+    user_result = cursor.fetchone()
+    print(user_result)
+
+    # if len(user_result) is 1:
+    if user_result == None:
+        return "Failed to login!"
+    
+    else:
+        return redirect(url_for("home"))
+
+@webapp.route("/home")
+def home():
+    return render_template("home.html")
+	
